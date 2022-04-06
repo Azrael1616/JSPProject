@@ -1,0 +1,45 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"
+import = "java.sql.*"%>
+<% request.setCharacterEncoding("UTF-8");
+   String id = request.getParameter("id");
+   String passwd = request.getParameter("pwd");
+%>
+
+<%
+	//1. jdbc 드라이버 로드
+	Class.forName("org.mariadb.jdbc.Driver");
+
+	//2. 커넥션 얻기
+	 String url = "jdbc:mariadb://localhost:3333/injedb";
+ 	String user = "inje";
+	String pwd = "4551";
+	Connection con = DriverManager.getConnection(url, user, pwd);
+	
+	//3.SQL 실행준비
+	String sql = "insert into login(id, pwd) values(?,?)";
+	//4.sql 실행
+	PreparedStatement pstmt = con.prepareStatement(sql);
+	pstmt.setString(1, id);
+	pstmt.setString(2, passwd);
+	pstmt.executeUpdate();
+	//int i = stmt.executeUpdate(sql);
+	
+	//5.객체햐재
+	pstmt.close();
+	con.close();
+	
+	response.sendRedirect("DBLogIn.jsp");
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+당신의 아이디는 <%=id %>이고<br>
+암호는는 <%=pwd %>입니다.
+</body>
+</html>
